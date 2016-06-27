@@ -374,6 +374,12 @@ static int parse_proc_cmdline_word(const char *word) {
                 } else
                         log_warning("Environment variable name '%s' is not valid. Ignoring.", cenv);
 
+        } else if (streq(word, "systemd.quiet")) {
+                arg_show_status = false;
+        } else if (streq(word, "systemd.debug")) {
+                log_set_max_level(LOG_DEBUG);
+                if (detect_container(NULL) > 0)
+                        log_set_target(LOG_TARGET_KMSG);
         } else if (startswith(word, "systemd.") ||
                    (in_initrd() && startswith(word, "rd.systemd."))) {
 
@@ -409,12 +415,6 @@ static int parse_proc_cmdline_word(const char *word) {
                                  "systemd.setenv=ASSIGNMENT                Set an environment variable for all spawned processes\n");
                 }
 
-        } else if (streq(word, "quiet"))
-                arg_show_status = false;
-        else if (streq(word, "debug")) {
-                log_set_max_level(LOG_DEBUG);
-                if (detect_container(NULL) > 0)
-                        log_set_target(LOG_TARGET_KMSG);
         } else if (!in_initrd()) {
                 unsigned i;
 
