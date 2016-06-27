@@ -32,10 +32,7 @@
 /systemd-reboot.service
 /systemd-kexec.service
 /systemd-user-sessions.service
-/systemd-readahead-done.service
 /systemd-tmpfiles.service
-/systemd-readahead-collect.service
-/systemd-readahead-replay.service
 /serial-getty@.service
 /systemd-modules-load.service
 /systemd-remount-fs.service

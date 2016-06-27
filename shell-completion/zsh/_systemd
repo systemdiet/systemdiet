@@ -64,7 +64,6 @@ case "$service" in
             '--pid=[Inform the init system about the main PID of the daemon]' \
             '--status=[Send a free-form status string for the daemon to the init systemd]' \
             '--booted[Returns 0 if the system was booted up with systemd]' \
-            '--readahead=[Controls disk read-ahead operations]:arguments:(cancel done noreply)'
     ;;
     systemd-tty-ask-password-agent)
         _arguments \

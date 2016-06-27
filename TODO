@@ -511,8 +511,6 @@ Features:
 * http://lists.freedesktop.org/archives/systemd-devel/2012-September/006502.html
   (network and remote-fs on shutdown)
 
-* come up with a nice way to write queue/read_ahead_kb for a block device without interfering with readahead
-
 * move PID 1 segfaults to /var/lib/systemd/coredump?
 
 * create /sbin/init symlinks from the build system
@@ -649,13 +647,6 @@ Features:
 
 * and a dbus call to generate target from current state
 
-* readahead:
-  - drop /.readahead on bigger upgrades with yum
-  - move readahead files into /var (look for them with .path units?)
-  - readahead: use BTRFS_IOC_DEFRAG_RANGE instead of BTRFS_IOC_DEFRAG ioctl, with START_IO
-  - readahead: when bumping /sys readahead variable save mtime and compare later to detect changes
-  - readahead: make use of EXT4_IOC_MOVE_EXT, as used by http://e4rat.sourceforge.net/
-
 * add support for /bin/mount -s
 
 * GC unreferenced jobs (such as .device jobs)
@@ -707,8 +698,6 @@ Features:
 * fingerprint.target, wireless.target, gps.target, netdevice.target
 
 * io priority during initialization
-
-* drop cap bounding set in readahead and other services
 
 * systemd-python:
    - figure out a simple way to wait for journal events in a way that
