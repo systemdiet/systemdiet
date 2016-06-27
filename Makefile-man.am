@@ -673,18 +673,6 @@ man/systemd-logind.html: man/systemd-logind.service.html
 
 endif
 
-if ENABLE_MACHINED
-MANPAGES += \
-	man/machinectl.1 \
-	man/systemd-machined.service.8
-MANPAGES_ALIAS += \
-	man/systemd-machined.8
-man/systemd-machined.8: man/systemd-machined.service.8
-man/systemd-machined.html: man/systemd-machined.service.html
-	$(html-alias)
-
-endif
-
 if ENABLE_QUOTACHECK
 MANPAGES += \
 	man/systemd-quotacheck.service.8
