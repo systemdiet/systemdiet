@@ -47,21 +47,10 @@
 #  include <mqueue.h>
 #endif
 
+#include "shared/macro.h"
 #include "sd-daemon.h"
 
-#if (__GNUC__ >= 4)
-#  ifdef SD_EXPORT_SYMBOLS
-/* Export symbols */
-#    define _sd_export_ __attribute__ ((visibility("default")))
-#  else
-/* Don't export the symbols */
-#    define _sd_export_ __attribute__ ((visibility("hidden")))
-#  endif
-#else
-#  define _sd_export_
-#endif
-
-_sd_export_ int sd_listen_fds(int unset_environment) {
+_public_ int sd_listen_fds(int unset_environment) {
 
 #if defined(DISABLE_SYSTEMD) || !defined(__linux__)
         return 0;
@@ -145,7 +134,7 @@ finish:
 #endif
 }
 
-_sd_export_ int sd_is_fifo(int fd, const char *path) {
+_public_ int sd_is_fifo(int fd, const char *path) {
         struct stat st_fd;
 
         if (fd < 0)
@@ -176,7 +165,7 @@ _sd_export_ int sd_is_fifo(int fd, const char *path) {
         return 1;
 }
 
-_sd_export_ int sd_is_special(int fd, const char *path) {
+_public_ int sd_is_special(int fd, const char *path) {
         struct stat st_fd;
 
         if (fd < 0)
@@ -263,7 +252,7 @@ union sockaddr_union {
         struct sockaddr_storage storage;
 };
 
-_sd_export_ int sd_is_socket(int fd, int family, int type, int listening) {
+_public_ int sd_is_socket(int fd, int family, int type, int listening) {
         int r;
 
         if (family < 0)
@@ -289,7 +278,7 @@ _sd_export_ int sd_is_socket(int fd, int family, int type, int listening) {
         return 1;
 }
 
-_sd_export_ int sd_is_socket_inet(int fd, int family, int type, int listening, uint16_t port) {
+_public_ int sd_is_socket_inet(int fd, int family, int type, int listening, uint16_t port) {
         union sockaddr_union sockaddr = {};
         socklen_t l = sizeof(sockaddr);
         int r;
@@ -332,7 +321,7 @@ _sd_export_ int sd_is_socket_inet(int fd, int family, int type, int listening, u
         return 1;
 }
 
-_sd_export_ int sd_is_socket_unix(int fd, int type, int listening, const char *path, size_t length) {
+_public_ int sd_is_socket_unix(int fd, int type, int listening, const char *path, size_t length) {
         union sockaddr_union sockaddr = {};
         socklen_t l = sizeof(sockaddr);
         int r;
@@ -373,7 +362,7 @@ _sd_export_ int sd_is_socket_unix(int fd, int type, int listening, const char *p
         return 1;
 }
 
-_sd_export_ int sd_is_mq(int fd, const char *path) {
+_public_ int sd_is_mq(int fd, const char *path) {
 #if !defined(__linux__) || defined(SD_DAEMON_DISABLE_MQ)
         return 0;
 #else
@@ -410,7 +399,7 @@ _sd_export_ int sd_is_mq(int fd, const char *path) {
 #endif
 }
 
-_sd_export_ int sd_notify(int unset_environment, const char *state) {
+_public_ int sd_notify(int unset_environment, const char *state) {
 #if defined(DISABLE_SYSTEMD) || !defined(__linux__) || !defined(SOCK_CLOEXEC)
         return 0;
 #else
@@ -480,7 +469,7 @@ finish:
 #endif
 }
 
-_sd_export_ int sd_notifyf(int unset_environment, const char *format, ...) {
+_public_ int sd_notifyf(int unset_environment, const char *format, ...) {
 #if defined(DISABLE_SYSTEMD) || !defined(__linux__)
         return 0;
 #else
@@ -502,7 +491,7 @@ _sd_export_ int sd_notifyf(int unset_environment, const char *format, ...) {
 #endif
 }
 
-_sd_export_ int sd_booted(void) {
+_public_ int sd_booted(void) {
 #if defined(DISABLE_SYSTEMD) || !defined(__linux__)
         return 0;
 #else
@@ -519,7 +508,7 @@ _sd_export_ int sd_booted(void) {
 #endif
 }
 
-_sd_export_ int sd_watchdog_enabled(int unset_environment, uint64_t *usec) {
+_public_ int sd_watchdog_enabled(int unset_environment, uint64_t *usec) {
 
 #if defined(DISABLE_SYSTEMD) || !defined(__linux__)
         return 0;
