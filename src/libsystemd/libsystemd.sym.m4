@@ -71,6 +71,7 @@ global:
         sd_journal_get_timeout;
         sd_journal_add_conjunction;
         sd_journal_open_files;
+        sd_journal_open_container;
 
 	/* sd-daemon */
         sd_booted;
