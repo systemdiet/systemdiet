@@ -1820,7 +1820,7 @@ static int service_spawn(
         if (r < 0)
                 goto fail;
 
-        our_env = new0(char*, 5);
+        our_env = new0(char*, 4);
         if (!our_env) {
                 r = -ENOMEM;
                 goto fail;
@@ -1834,12 +1834,6 @@ static int service_spawn(
 
         if (s->main_pid > 0)
                 if (asprintf(our_env + n_env++, "MAINPID=%lu", (unsigned long) s->main_pid) < 0) {
-                        r = -ENOMEM;
-                        goto fail;
-                }
-
-        if (s->watchdog_usec > 0)
-                if (asprintf(our_env + n_env++, "WATCHDOG_USEC=%llu", (unsigned long long) s->watchdog_usec) < 0) {
                         r = -ENOMEM;
                         goto fail;
                 }
@@ -1874,6 +1868,7 @@ static int service_spawn(
                        UNIT(s)->manager->cgroup_supported,
                        path,
                        UNIT(s)->id,
+                       s->watchdog_usec,
                        s->type == SERVICE_IDLE ? UNIT(s)->manager->idle_pipe : NULL,
                        &pid);
         if (r < 0)

@@ -592,6 +592,7 @@ static int swap_spawn(Swap *s, ExecCommand *c, pid_t *_pid) {
                        UNIT(s)->manager->cgroup_supported,
                        UNIT(s)->cgroup_path,
                        UNIT(s)->id,
+                       0,
                        NULL,
                        &pid);
         if (r < 0)

@@ -174,6 +174,7 @@ int exec_spawn(ExecCommand *command,
                CGroupControllerMask cgroup_mask,
                const char *cgroup_path,
                const char *unit_id,
+               usec_t watchdog_usec,
                int pipe_fd[2],
                pid_t *ret);
 
