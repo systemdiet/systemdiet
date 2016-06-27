@@ -161,3 +161,14 @@ config.log
 config.status
 configure
 stamp-*
+
+/libsystemd-daemon.c
+/libsystemd-id128.c
+/libsystemd-journal.c
+/libsystemd-login.c
+/src/libsystemd/libsystemd-daemon.pc
+/src/libsystemd/libsystemd-id128.pc
+/src/libsystemd/libsystemd-journal.pc
+/src/libsystemd/libsystemd-login.pc
+/src/libsystemd/libsystemd.pc
+/src/libsystemd/libsystemd.sym
