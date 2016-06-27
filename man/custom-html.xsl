@@ -148,12 +148,6 @@
   </a>·
   <a>
     <xsl:attribute name="href">
-      <xsl:text>../python-systemd/index.html</xsl:text>
-    </xsl:attribute>
-    <xsl:text>Python </xsl:text>
-  </a>·
-  <a>
-    <xsl:attribute name="href">
       <xsl:text>../libudev/index.html</xsl:text>
     </xsl:attribute>
     <xsl:text>libudev </xsl:text>

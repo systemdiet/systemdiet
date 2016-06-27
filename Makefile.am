@@ -3886,164 +3886,6 @@ EXTRA_DIST += \
 	units/systemd-user-sessions.service.in
 
 # ------------------------------------------------------------------------------
-if HAVE_PYTHON_DEVEL
-pkgpyexec_LTLIBRARIES = \
-	_journal.la \
-	id128.la \
-	_daemon.la \
-	_reader.la \
-	login.la
-
-_journal_la_SOURCES = \
-	src/python-systemd/_journal.c
-
-_journal_la_CFLAGS = \
-	$(AM_CFLAGS) \
-	-fvisibility=default \
-	$(PYTHON_DEVEL_CFLAGS)
-
-_journal_la_LDFLAGS = \
-	$(AM_LDFLAGS) \
-	-shared \
-	-module \
-	-avoid-version
-
-_journal_la_LIBADD = \
-	$(PYTHON_DEVEL_LIBS) \
-	libsystemd-journal.la
-
-id128_la_SOURCES = \
-	src/python-systemd/id128.c \
-	src/python-systemd/id128-constants.h \
-	src/python-systemd/pyutil.c \
-	src/python-systemd/pyutil.h
-
-id128_la_CFLAGS = \
-	$(AM_CFLAGS) \
-	-fvisibility=default \
-	$(PYTHON_DEVEL_CFLAGS) \
-	-I$(top_builddir)/src/python-systemd
-
-id128_la_LDFLAGS = \
-	$(AM_LDFLAGS) \
-	-shared \
-	-module \
-	-avoid-version
-
-id128_la_LIBADD = \
-	$(PYTHON_DEVEL_LIBS) \
-	libsystemd-id128.la
-
-_daemon_la_SOURCES = \
-	src/python-systemd/_daemon.c \
-	src/python-systemd/pyutil.c \
-	src/python-systemd/pyutil.h
-
-_daemon_la_CFLAGS = \
-	$(AM_CFLAGS) \
-	-fvisibility=default \
-	$(PYTHON_DEVEL_CFLAGS) \
-	-I$(top_builddir)/src/python-systemd
-
-_daemon_la_LDFLAGS = \
-	$(AM_LDFLAGS) \
-	-shared \
-	-module \
-	-avoid-version
-
-_daemon_la_LIBADD = \
-	$(PYTHON_DEVEL_LIBS) \
-	libsystemd-daemon.la
-
-_reader_la_SOURCES = \
-	src/python-systemd/_reader.c \
-	src/python-systemd/pyutil.c \
-	src/python-systemd/pyutil.h
-
-_reader_la_CFLAGS = \
-	$(AM_CFLAGS) \
-	-fvisibility=default \
-	$(PYTHON_DEVEL_CFLAGS)
-
-_reader_la_LDFLAGS = \
-	$(AM_LDFLAGS) \
-	-shared \
-	-module \
-	-avoid-version
-
-_reader_la_LIBADD = \
-	$(PYTHON_DEVEL_LIBS) \
-	libsystemd-journal.la \
-	libsystemd-id128.la \
-	libsystemd-shared.la \
-	libsystemd-daemon-internal.la \
-	$(RT_LIBS)
-
-login_la_SOURCES = \
-	src/python-systemd/login.c \
-	src/python-systemd/pyutil.c \
-	src/python-systemd/pyutil.h
-
-login_la_CFLAGS = \
-	$(AM_CFLAGS) \
-	-fvisibility=default \
-	$(PYTHON_DEVEL_CFLAGS)
-
-login_la_LDFLAGS = \
-	$(AM_LDFLAGS) \
-	-shared \
-	-module \
-	-avoid-version
-
-login_la_LIBADD = \
-	$(PYTHON_DEVEL_LIBS) \
-	libsystemd-journal.la \
-	libsystemd-login.la \
-	libsystemd-shared.la \
-	libsystemd-daemon-internal.la \
-	$(RT_LIBS)
-
-dist_pkgpyexec_PYTHON = \
-	src/python-systemd/journal.py \
-	src/python-systemd/daemon.py \
-	src/python-systemd/__init__.py
-
-src/python-systemd/id128-constants.h: src/systemd/sd-messages.h Makefile
-	$(AM_V_at)$(MKDIR_P) $(dir $@)
-	$(AM_V_GEN)$(SED) -n -r 's/,//g; s/#define (SD_MESSAGE_[A-Z0-9_]+)\s.*/add_id(m, "\1", \1) JOINER/p' <$< >$@
-
-BUILT_SOURCES += \
-	src/python-systemd/id128-constants.h
-
-SPHINXOPTS = -D version=$(VERSION) -D release=$(VERSION)
-sphinx-%:
-	$(AM_V_at)test -n "$(SPHINX_BUILD)" || { echo " *** sphinx-build is not available"; exit 1; }
-	$(AM_V_GEN)PYTHONPATH=$(DESTDIR)$(pyexecdir) LD_LIBRARY_PATH=$(DESTDIR)$(libdir) $(SPHINX_BUILD) -b $* $(SPHINXOPTS) $(top_srcdir)/src/python-systemd/docs $(top_builddir)/docs/html/python-systemd/
-	$(AM_V_at)echo Output has been generated in $(abs_top_builddir)/docs/html/python-systemd/
-
-python-shell:
-	$(AM_V_at)echo "Starting python with $(DESTDIR)$(pyexecdir)"
-	$(AM_V_at)PYTHONPATH=$(DESTDIR)$(pyexecdir) LD_LIBRARY_PATH=$(DESTDIR)$(libdir) $(PYTHON)
-
-destdir-sphinx: all
-	dir="$$(mktemp -d /tmp/systemd-install.XXXXXX)" && \
-		$(MAKE) DESTDIR="$$dir" install && \
-		$(MAKE) DESTDIR="$$dir" sphinx-html && \
-		rm -rf "$$dir"
-
-endif
-
-CLEAN_LOCAL_HOOKS += clean-sphinx
-
-clean-sphinx:
-	-rm -rf docs/html/python-systemd/
-
-# Remove Python stuff, e.g. to force rebuilding for a different Python version.
-clean-python:
-	-rm -rf src/python-systemd/.libs src/python-systemd/*.l[ao]
-	-rm -f _daemon.la id128.la _journal.la login.la _reader.la
-
-# ------------------------------------------------------------------------------
 substitutions = \
        '|rootlibexecdir=$(rootlibexecdir)|' \
        '|rootbindir=$(rootbindir)|' \
@@ -4088,8 +3930,7 @@ substitutions = \
        '|VARLOGDIR=$(varlogdir)|' \
        '|RC_LOCAL_SCRIPT_PATH_START=$(RC_LOCAL_SCRIPT_PATH_START)|' \
        '|RC_LOCAL_SCRIPT_PATH_STOP=$(RC_LOCAL_SCRIPT_PATH_STOP)|' \
-       '|PYTHON=$(PYTHON)|' \
-       '|PYTHON_BINARY=$(PYTHON_BINARY)|'
+       '|PYTHON=$(PYTHON)|'
 
 SED_PROCESS = \
 	$(AM_V_GEN)$(MKDIR_P) $(dir $@) && \
@@ -4396,7 +4237,6 @@ doc-sync: all destdir-sphinx
 	gtkdoc-rebase --html-dir=docs/libudev/html --online
 	rsync -rlv --delete docs/libudev/html/ --omit-dir-times $(www_target)/libudev/
 	rsync -rlv --delete-excluded --include="*.html" --exclude="*" --omit-dir-times man/ $(www_target)/man/
-	rsync -rlv --delete --omit-dir-times docs/html/python-systemd/ $(www_target)/python-systemd/
 
 git-tag:
 	git tag "v$(VERSION)" -m "systemd $(VERSION)"

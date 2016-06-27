@@ -194,21 +194,6 @@ AC_ARG_VAR(PYTHON_BINARY, [Python binary used to launch installed scripts])
 AS_IF([test "x$have_python" != "xyes" -a "x$enable_python_devel" = "xyes"],
       [AC_MSG_ERROR([*** python-devel support requires --with-python])])
 
-have_python_devel=no
-AC_ARG_ENABLE(python_devel, AS_HELP_STRING([--disable-python-devel], [Do not build python modules]))
-AS_IF([test "x$have_python" = "xyes" -a "x$enable_python_devel" != "xno"], [
-      PKG_CHECK_MODULES([PYTHON_DEVEL], [python-${PYTHON_VERSION}],
-            [have_python_devel=yes],
-            [PKG_CHECK_MODULES([PYTHON_DEVEL], [python],
-                  [have_python_devel=yes],
-                  [have_python_devel=no])])
-      AS_IF([test "x$have_python_devel" = xno -a "x$enable_python_devel" = xyes],
-            [AC_MSG_ERROR([*** python-devel support requested but libraries not found])])
-      AC_PATH_PROGS(SPHINX_BUILD, sphinx-build-${PYTHON_VERSION} sphinx-build)
-])
-AM_CONDITIONAL([HAVE_PYTHON_DEVEL], [test "$have_python_devel" = "yes"])
-
-# ------------------------------------------------------------------------------
 
 AC_SEARCH_LIBS([dlsym], [dl], [], [AC_MSG_ERROR([*** Dynamic linking loader library not found])])
 AC_CHECK_HEADERS([sys/capability.h], [], [AC_MSG_ERROR([*** POSIX caps headers not found])])
@@ -1031,8 +1016,6 @@ AC_MSG_RESULT([
         blkid:                   ${have_blkid}
         nss-myhostname:          ${have_myhostname}
         gintrospection:          ${enable_introspection}
-        Python:                  ${have_python}
-        Python Headers:          ${have_python_devel}
         man pages:               ${have_manpages}
         gtk-doc:                 ${enable_gtk_doc}
         test coverage:           ${have_coverage}
@@ -1049,8 +1032,6 @@ AC_MSG_RESULT([
         rootlib dir:             ${with_rootlibdir}
         SysV init scripts:       ${SYSTEM_SYSVINIT_PATH}
         SysV rc?.d directories:  ${SYSTEM_SYSVRCND_PATH}
-        Build Python:            ${PYTHON}
-        Installation Python:     ${PYTHON_BINARY}
         sphinx binary:           ${SPHINX_BUILD}
         firmware path:           ${FIRMWARE_PATH}
         PAM modules dir:         ${with_pamlibdir}
@@ -1068,6 +1049,4 @@ AC_MSG_RESULT([
         CFLAGS:                  ${OUR_CFLAGS} ${CFLAGS}
         CPPFLAGS:                ${OUR_CPPFLAGS} ${CPPFLAGS}
         LDFLAGS:                 ${OUR_LDFLAGS} ${LDFLAGS}
-        PYTHON_CFLAGS:           ${PYTHON_DEVEL_CFLAGS}
-        PYTHON_LIBS:             ${PYTHON_DEVEL_LIBS}
 ])
