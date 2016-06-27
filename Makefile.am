@@ -1525,6 +1525,10 @@ systemd_initctl_LDADD = \
 	libsystemd-shared.la \
 	libsystemd-dbus.la
 
+systemd_initctl_LDFLAGS = \
+        $(AM_LDFLAGS) \
+	-lrt
+
 # ------------------------------------------------------------------------------
 systemd_update_utmp_SOURCES = \
 	src/update-utmp/update-utmp.c
