@@ -51,6 +51,5 @@
 /initrd-parse-etc.service
 /initrd-switch-root.service
 /initrd-udevadm-cleanup-db.service
-/systemd-nspawn@.service
 /systemd-machined.service
 /kmod-static-nodes.service

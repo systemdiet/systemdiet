@@ -232,11 +232,6 @@ EOF
                 exit 1
         fi
     )
-    rm -fr $TESTDIR/nspawn-root
-    ddebug "cp -ar $TESTDIR/root $TESTDIR/nspawn-root"
-    cp -ar $TESTDIR/root $TESTDIR/nspawn-root
-    # we don't mount in the nspawn root
-    rm -fr $TESTDIR/nspawn-root/etc/fstab
 
     ddebug "umount $TESTDIR/root/var"
     umount $TESTDIR/root/var

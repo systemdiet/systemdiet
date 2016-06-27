@@ -31,29 +31,11 @@ run_qemu() {
 }
 
 
-run_nspawn() {
-    ../../systemd-nspawn -b -D $TESTDIR/nspawn-root /usr/lib/systemd/systemd
-    ret=1
-    [[ -e $TESTDIR/nspawn-root/testok ]] && ret=0
-    cp -a $TESTDIR/nspawn-root/failed $TESTDIR
-    cp -a $TESTDIR/nspawn-root/var/log/journal $TESTDIR
-    cat $TESTDIR/failed
-    ls -l $TESTDIR/journal/*/*.journal
-    test -s $TESTDIR/failed && ret=$(($ret+1))
-    return $ret
-}
-
-
 test_run() {
     if check_qemu ; then
         run_qemu || return 1
     else
         dwarn "can't run qemu-kvm, skipping"
-    fi
-    if check_nspawn; then
-        run_nspawn || return 1
-    else
-        dwarn "can't run systemd-nspawn, skipping"
     fi
     return 0
 }
@@ -225,11 +207,6 @@ EOF
                 exit 1
         fi
     )
-    rm -fr $TESTDIR/nspawn-root
-    ddebug "cp -ar $TESTDIR/root $TESTDIR/nspawn-root"
-    cp -ar $TESTDIR/root $TESTDIR/nspawn-root
-    # we don't mount in the nspawn root
-    rm -f $TESTDIR/nspawn-root/etc/fstab
 
     ddebug "umount $TESTDIR/root"
     umount $TESTDIR/root

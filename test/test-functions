@@ -794,10 +794,6 @@ check_qemu() {
     command -v qemu-kvm &>/dev/null && [[ -c /dev/kvm ]]
 }
 
-check_nspawn() {
-    [[ -d /sys/fs/cgroup/systemd ]]
-}
-
 
 do_test() {
     if [[ $UID != "0" ]]; then

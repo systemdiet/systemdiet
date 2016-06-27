@@ -188,11 +188,6 @@ Features:
   complain loudly if they have argv[0][0] == '@' set.
   https://bugzilla.redhat.com/show_bug.cgi?id=961044
 
-* add an option to nspawn that uses seccomp to make socket(AF_NETLINK,
-  SOCK_RAW, NETLINK_AUDIT) fail the the appropriate error code that
-  makes the audit userspace to think auditing is not available in the
-  kernel.
-
 * Introduce a way how we can kill the main process of a service with KillSignal, but all processes with SIGKILL later on
   https://bugzilla.redhat.com/show_bug.cgi?id=952634
 
@@ -468,20 +463,6 @@ Features:
 * currently x-systemd.timeout is lost in the initrd, since crypttab is copied into dracut, but fstab isn't
 
 * refuse boot if /etc/machine-id is not useful (or set taint?)
-
-* nspawn:
-  - nspawn: consider changing users for -u with su, so that NSS resolving works correctly
-  - nspawn: implement personality changes a la linux32(8)
-  - nspawn: --read-only is not applied recursively to submounts
-  - nspawn: make use of device cgroup controller by default
-  - bind mount read-only the cgroup tree higher than nspawn
-  - nspawn: investigate whether we can support the same as LXC's
-    lxc.network.type=phys mode, and pass through entire network
-    interfaces to the container
-  - nspawn: maybe add a way to drop additional caps, in addition to add additional caps
-  - nspawn: maybe explicitly reset loginuid?
-  - nspawn: make it work for dwalsh and shared /usr containers -- tmpfs mounts as command line parameters, selinux exec context
-  - refuses to boot containers without /etc/machine-id (OK?), and with empty /etc/machine-id (not OK).
 
 * cryptsetup:
   - cryptsetup-generator: allow specification of passwords in crypttab itself
