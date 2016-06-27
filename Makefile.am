@@ -2613,18 +2613,6 @@ journalctl_LDADD += \
 	libsystemd-acl.la
 endif
 
-if HAVE_QRENCODE
-journalctl_SOURCES += \
-	src/journal/journal-qrcode.c \
-	src/journal/journal-qrcode.h
-
-journalctl_CFLAGS += \
-	$(QRENCODE_CFLAGS)
-
-journalctl_LDADD += \
-	$(QRENCODE_LIBS)
-endif
-
 test_journal_SOURCES = \
 	src/journal/test-journal.c
 

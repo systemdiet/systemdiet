@@ -582,18 +582,6 @@ fi
 AM_CONDITIONAL(HAVE_LIBCRYPTSETUP, [test "$have_libcryptsetup" = "yes"])
 
 # ------------------------------------------------------------------------------
-have_qrencode=no
-AC_ARG_ENABLE(qrencode, AS_HELP_STRING([--disable-qrencode], [disable qrencode support]))
-if test "x$enable_qrencode" != "xno"; then
-        PKG_CHECK_MODULES(QRENCODE, [ libqrencode ],
-                [AC_DEFINE(HAVE_QRENCODE, 1, [Define if qrencode is available]) have_qrencode=yes], have_qrencode=no)
-        if test "x$have_qrencode" = xno -a "x$enable_qrencode" = xyes; then
-                AC_MSG_ERROR([*** qrencode support requested but libraries not found])
-        fi
-fi
-AM_CONDITIONAL(HAVE_QRENCODE, [test "$have_qrencode" = "yes"])
-
-# ------------------------------------------------------------------------------
 have_microhttpd=no
 AC_ARG_ENABLE(microhttpd, AS_HELP_STRING([--disable-microhttpd], [disable microhttpd support]))
 if test "x$enable_microhttpd" != "xno"; then
@@ -960,7 +948,6 @@ AC_MSG_RESULT([
         ACL:                     ${have_acl}
         XATTR:                   ${have_xattr}
         GCRYPT:                  ${have_gcrypt}
-        QRENCODE:                ${have_qrencode}
         MICROHTTPD:              ${have_microhttpd}
         CHKCONFIG:               ${have_chkconfig}
         binfmt:                  ${have_binfmt}
