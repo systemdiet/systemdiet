@@ -1016,6 +1016,81 @@ static void do_idle_pipe_dance(int idle_pipe[4]) {
         safe_close(idle_pipe[3]);
 }
 
+static int build_environment(
+                ExecContext *c,
+                unsigned n_fds,
+                const char *home,
+                const char *username,
+                const char *shell,
+                char ***ret) {
+
+        _cleanup_strv_free_ char **our_env = NULL;
+        unsigned n_env = 0;
+        char *x;
+
+        assert(c);
+        assert(ret);
+
+        our_env = new(char*, 8);
+        if (!our_env)
+                return -ENOMEM;
+
+        if (n_fds > 0) {
+                if (asprintf(&x, "LISTEN_PID=%lu", (unsigned long) getpid()) < 0)
+                        return -ENOMEM;
+                our_env[n_env++] = x;
+
+                if (asprintf(&x, "LISTEN_FDS=%u", n_fds) < 0)
+                        return -ENOMEM;
+                our_env[n_env++] = x;
+        }
+
+        if (home) {
+                x = strappend("HOME=", home);
+                if (!x)
+                        return -ENOMEM;
+                our_env[n_env++] = x;
+        }
+
+        if (username) {
+                x = strappend("LOGNAME=", username);
+                if (!x)
+                        return -ENOMEM;
+                our_env[n_env++] = x;
+
+                x = strappend("USER=", username);
+                if (!x)
+                        return -ENOMEM;
+                our_env[n_env++] = x;
+        }
+
+        if (shell) {
+                x = strappend("SHELL=", shell);
+                if (!x)
+                        return -ENOMEM;
+                our_env[n_env++] = x;
+        }
+
+        if (is_terminal_input(c->std_input) ||
+            c->std_output == EXEC_OUTPUT_TTY ||
+            c->std_error == EXEC_OUTPUT_TTY ||
+            c->tty_path) {
+
+                x = strdup(default_term_for_tty(tty_path(c)));
+                if (!x)
+                        return -ENOMEM;
+                our_env[n_env++] = x;
+        }
+
+        our_env[n_env++] = NULL;
+        assert(n_env <= 8);
+
+        *ret = our_env;
+        our_env = NULL;
+
+        return 0;
+}
+
 int exec_spawn(ExecCommand *command,
                char **argv,
                ExecContext *context,
@@ -1461,28 +1536,11 @@ int exec_spawn(ExecCommand *command,
                         }
                 }
 
-                our_env = new(char*, 8);
-                if (!our_env ||
-                    (n_fds > 0 && (
-                            asprintf(our_env + n_env++, "LISTEN_PID=%lu", (unsigned long) getpid()) < 0 ||
-                            asprintf(our_env + n_env++, "LISTEN_FDS=%u", n_fds) < 0)) ||
-                    (home && asprintf(our_env + n_env++, "HOME=%s", home) < 0) ||
-                    (username && (
-                            asprintf(our_env + n_env++, "LOGNAME=%s", username) < 0 ||
-                            asprintf(our_env + n_env++, "USER=%s", username) < 0)) ||
-                    (shell && asprintf(our_env + n_env++, "SHELL=%s", shell) < 0) ||
-                    ((is_terminal_input(context->std_input) ||
-                      context->std_output == EXEC_OUTPUT_TTY ||
-                      context->std_error == EXEC_OUTPUT_TTY) && (
-                              !(our_env[n_env++] = strdup(default_term_for_tty(tty_path(context))))))) {
-
-                        err = -ENOMEM;
+                err = build_environment(context, n_fds, home, username, shell, &our_env);
+                if (r < 0) {
                         r = EXIT_MEMORY;
                         goto fail_child;
                 }
-
-                our_env[n_env++] = NULL;
-                assert(n_env <= 8);
 
                 final_env = strv_env_merge(5,
                                            environment,
