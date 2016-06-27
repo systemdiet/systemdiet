@@ -129,6 +129,9 @@ global:
         sd_get_machine_names;
         sd_pid_get_slice;
         sd_session_get_vt;
+        sd_session_is_remote;
+        sd_session_get_remote_user;
+        sd_session_get_remote_host;
 local:
         *;
 };
