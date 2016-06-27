@@ -84,6 +84,7 @@ global:
         sd_listen_fds;
         sd_notify;
         sd_notifyf;
+        sd_watchdog_enabled;
 
 	/* sd-id128 */
         sd_id128_to_string;
