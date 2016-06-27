@@ -8,7 +8,6 @@
 /cdrom_id
 /collect
 /coverage/
-/gtk-doc.make
 /hostnamectl
 /install-tree
 /journalctl

@@ -125,7 +125,6 @@ REQUIREMENTS:
         libtool
         intltool
         gperf
-        gtkdocize (optional)
         python (optional)
         sphinx (optional)
         python-lxml (entirely optional)

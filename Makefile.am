@@ -2137,14 +2137,6 @@ busctl_LDADD = \
 	libsystemd-bus.la
 
 # ------------------------------------------------------------------------------
-if ENABLE_GTK_DOC
-SUBDIRS += \
-	docs/libudev
-
-noinst_DATA += \
-	docs/html/libudev
-endif
-
 include_HEADERS += \
 	src/libudev/libudev.h
 
@@ -4210,11 +4202,6 @@ DISTCHECK_CONFIGURE_FLAGS += \
 	--with-sysvrcnd-path=
 endif
 
-if ENABLE_GTK_DOC
-DISTCHECK_CONFIGURE_FLAGS += \
-	--enable-gtk-doc
-endif
-
 hwdb-update:
 	( cd $(top_srcdir)/hwdb && \
 	wget -N http://www.linux-usb.org/usb.ids \
@@ -4234,7 +4221,6 @@ upload: all distcheck
 
 www_target = www.freedesktop.org:/srv/www.freedesktop.org/www/software/systemd
 doc-sync: all destdir-sphinx
-	gtkdoc-rebase --html-dir=docs/libudev/html --online
 	rsync -rlv --delete docs/libudev/html/ --omit-dir-times $(www_target)/libudev/
 	rsync -rlv --delete-excluded --include="*.html" --exclude="*" --omit-dir-times man/ $(www_target)/man/
 
