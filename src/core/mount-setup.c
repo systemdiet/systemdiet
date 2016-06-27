@@ -41,7 +41,6 @@
 #include "path-util.h"
 #include "missing.h"
 #include "virt.h"
-#include "efivars.h"
 
 #ifndef TTY_GID
 #define TTY_GID 5
@@ -95,10 +94,6 @@ static const MountPoint mount_table[] = {
           NULL,       MNT_IN_CONTAINER },
         { "pstore",     "/sys/fs/pstore",            "pstore",     NULL, MS_NOSUID|MS_NOEXEC|MS_NODEV,
           NULL,       MNT_NONE },
-#ifdef ENABLE_EFI
-        { "efivarfs",   "/sys/firmware/efi/efivars", "efivarfs",   NULL, MS_NOSUID|MS_NOEXEC|MS_NODEV,
-          is_efi_boot, MNT_NONE },
-#endif
 };
 
 /* These are API file systems that might be mounted by other software,

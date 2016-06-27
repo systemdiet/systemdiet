@@ -23,7 +23,6 @@
 
 #include "boot-timestamps.h"
 #include "acpi-fpdt.h"
-#include "efivars.h"
 
 int boot_timestamps(const dual_timestamp *n, dual_timestamp *firmware, dual_timestamp *loader) {
         usec_t x, y, a;
@@ -39,13 +38,8 @@ int boot_timestamps(const dual_timestamp *n, dual_timestamp *firmware, dual_time
         }
 
         r = acpi_get_boot_usec(&x, &y);
-        if (r < 0) {
-#ifdef ENABLE_EFI
-                r = efi_loader_get_boot_usec(&x, &y);
-                if (r < 0)
-#endif
-                        return r;
-        }
+        if (r < 0)
+		return r;
 
         /* Let's convert this to timestamps where the firmware
          * began/loader began working. To make this more confusing:

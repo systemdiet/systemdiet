@@ -667,8 +667,6 @@ libsystemd_shared_la_SOURCES = \
 	src/shared/udev-util.h \
 	src/shared/virt.c \
 	src/shared/virt.h \
-	src/shared/efivars.c \
-	src/shared/efivars.h \
 	src/shared/path-util.c \
 	src/shared/path-util.h \
 	src/shared/time-util.c \
@@ -1228,17 +1226,6 @@ test_hostname_SOURCES = \
 test_hostname_LDADD = \
 	libsystemd-core.la
 
-if ENABLE_EFI
-manual_tests += \
-	test-boot-timestamp
-
-test_boot_timestamp_SOURCES = \
-	src/test/test-boot-timestamps.c
-
-test_boot_timestamp_LDADD = \
-	libsystemd-shared.la
-endif
-
 test_unit_name_SOURCES = \
 	src/test/test-unit-name.c
 
@@ -1733,42 +1720,6 @@ systemd_system_update_generator_SOURCES = \
 systemd_system_update_generator_LDADD = \
 	libsystemd-label.la \
 	libsystemd-shared.la
-
-if ENABLE_EFI
-# ------------------------------------------------------------------------------
-systemgenerator_PROGRAMS +=  \
-	systemd-efi-boot-generator
-
-systemd_efi_boot_generator_SOURCES = \
-	src/efi-boot-generator/efi-boot-generator.c
-
-systemd_efi_boot_generator_LDADD = \
-	libsystemd-label.la \
-	libsystemd-shared.la
-
-# ------------------------------------------------------------------------------
-bootctl_SOURCES = \
-	src/boot/boot.h \
-	src/boot/boot-loader.h \
-	src/boot/bootctl.c \
-	src/boot/boot-loader.c \
-	src/boot/boot-efi.c
-
-bootctl_LDADD = \
-	libsystemd-shared.la \
-	libsystemd-id128.la \
-	libsystemd-daemon.la
-
-bin_PROGRAMS += \
-	bootctl
-
-dist_bashcompletion_DATA += \
-	shell-completion/bash/bootctl
-
-dist_zshcompletion_DATA += \
-	shell-completion/zsh/_bootctl
-
-endif
 
 # ------------------------------------------------------------------------------
 if HAVE_BLKID

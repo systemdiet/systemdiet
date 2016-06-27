@@ -53,7 +53,6 @@ MANPAGES += \
 	man/systemd-cgtop.1 \
 	man/systemd-delta.1 \
 	man/systemd-detect-virt.1 \
-	man/systemd-efi-boot-generator.8 \
 	man/systemd-fsck@.service.8 \
 	man/systemd-fstab-generator.8 \
 	man/systemd-getty-generator.8 \
@@ -645,15 +644,6 @@ endif
 if ENABLE_COREDUMP
 MANPAGES += \
 	man/systemd-coredumpctl.1
-MANPAGES_ALIAS += \
-	#
-
-
-endif
-
-if ENABLE_EFI
-MANPAGES += \
-	man/bootctl.1
 MANPAGES_ALIAS += \
 	#
 

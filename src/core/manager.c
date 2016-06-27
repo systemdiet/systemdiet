@@ -492,11 +492,6 @@ int manager_new(SystemdRunningAs running_as, bool reexecuting, Manager **_m) {
         if (!m)
                 return -ENOMEM;
 
-#ifdef ENABLE_EFI
-        if (running_as == SYSTEMD_SYSTEM && detect_container(NULL) <= 0)
-                boot_timestamps(&m->userspace_timestamp, &m->firmware_timestamp, &m->loader_timestamp);
-#endif
-
         m->running_as = running_as;
         m->name_data_slot = m->conn_data_slot = m->subscribed_data_slot = -1;
         m->exit_code = _MANAGER_EXIT_CODE_INVALID;
