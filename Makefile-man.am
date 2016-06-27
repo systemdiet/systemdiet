@@ -708,18 +708,6 @@ man/systemd-random-seed.html: man/systemd-random-seed.service.html
 
 endif
 
-if ENABLE_TIMEDATED
-MANPAGES += \
-	man/systemd-timedated.service.8 \
-	man/timedatectl.1
-MANPAGES_ALIAS += \
-	man/systemd-timedated.8
-man/systemd-timedated.8: man/systemd-timedated.service.8
-man/systemd-timedated.html: man/systemd-timedated.service.html
-	$(html-alias)
-
-endif
-
 if ENABLE_VCONSOLE
 MANPAGES += \
 	man/systemd-vconsole-setup.service.8 \

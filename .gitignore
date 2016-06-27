@@ -16,7 +16,6 @@
 /mtd_probe
 /org.freedesktop.hostname1.xml
 /org.freedesktop.systemd1.*.xml
-/org.freedesktop.timedate1.xml
 /scsi_id
 /systemadm
 /systemctl
@@ -69,7 +68,6 @@
 /systemd-stdio-bridge
 /systemd-sysctl
 /systemd-system-update-generator
-/systemd-timedated
 /systemd-tmpfiles
 /systemd-tty-ask-password-agent
 /systemd-uaccess
@@ -141,7 +139,6 @@
 /test-utf8
 /test-util
 /test-watchdog
-/timedatectl
 /udevadm
 /v4l_id
 /*.tar.bz2

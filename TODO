@@ -298,8 +298,6 @@ Features:
 
 * use "log level" rather than "log priority" everywhere
 
-* timedate: have global on/off switches for auto-time (NTP), and auto-timezone that connman can subscribe to.
-
 * dev-setup.c: when running in a container, create a tiny stub udev
   database with the systemd tag set for all network interfaces found,
   so that libudev reports them as present, and systemd's .device units
@@ -446,9 +444,6 @@ Features:
 * fedup: add --unit to systemctl switch-root somehow
 * fedup: don't delete initrd on switch-root
 * fedup: generator
-
-* timedated:
-  - timedated: refuse time changes when NTP is on
 
 * clean up date formatting and parsing so that all absolute/relative timestamps we format can also be parsed
 
