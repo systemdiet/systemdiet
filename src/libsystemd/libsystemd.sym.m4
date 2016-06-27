@@ -17,7 +17,7 @@
   (at your option) any later version.
 ***/
 
-LIBSYSTEMD_208 {
+LIBSYSTEMD_209 {
 global:
 	/* sd-journal */
         sd_journal_print;
