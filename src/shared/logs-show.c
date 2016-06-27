@@ -1166,7 +1166,7 @@ static int get_boot_id_for_machine(const char *machine, sd_id128_t *boot_id) {
         if (child == 0) {
                 int fd;
 
-                close_nointr_nofail(sock[0]);
+                safe_close(sock[0]);
                 sock[0] = -1;
 
                 r = setns(nsfd, CLONE_NEWNS);
@@ -1178,7 +1178,7 @@ static int get_boot_id_for_machine(const char *machine, sd_id128_t *boot_id) {
                         _exit(EXIT_FAILURE);
 
                 k = loop_read(fd, buf, 36, false);
-                close_nointr_nofail(fd);
+                safe_close(fd);
                 if (k != 36)
                         _exit(EXIT_FAILURE);
 
@@ -1189,7 +1189,7 @@ static int get_boot_id_for_machine(const char *machine, sd_id128_t *boot_id) {
                 _exit(EXIT_SUCCESS);
         }
 
-        close_nointr_nofail(sock[1]);
+        safe_close(sock[1]);
         sock[1] = -1;
 
         k = recv(sock[0], buf, 36, 0);
