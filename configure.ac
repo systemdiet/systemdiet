@@ -659,14 +659,6 @@ AM_CONDITIONAL(ENABLE_LOGIND, [test "$have_logind" = "yes"])
 AS_IF([test "$have_logind" = "yes"], [ AC_DEFINE(HAVE_LOGIND, [1], [Logind support available]) ])
 
 # ------------------------------------------------------------------------------
-have_hostnamed=no
-AC_ARG_ENABLE(hostnamed, AS_HELP_STRING([--disable-hostnamed], [disable hostname daemon]))
-if test "x$enable_hostnamed" != "xno"; then
-        have_hostnamed=yes
-fi
-AM_CONDITIONAL(ENABLE_HOSTNAMED, [test "$have_hostnamed" = "yes"])
-
-# ------------------------------------------------------------------------------
 have_coredump=no
 AC_ARG_ENABLE(coredump, AS_HELP_STRING([--disable-coredump], [disable coredump hook]))
 if test "x$enable_coredump" != "xno"; then
@@ -933,7 +925,6 @@ AC_MSG_RESULT([
         randomseed:              ${have_randomseed}
         backlight:               ${have_backlight}
         logind:                  ${have_logind}
-        hostnamed:               ${have_hostnamed}
         coredump:                ${have_coredump}
         polkit:                  ${have_polkit}
         kmod:                    ${have_kmod}

@@ -648,18 +648,6 @@ MANPAGES_ALIAS += \
 
 endif
 
-if ENABLE_HOSTNAMED
-MANPAGES += \
-	man/hostnamectl.1 \
-	man/systemd-hostnamed.service.8
-MANPAGES_ALIAS += \
-	man/systemd-hostnamed.8
-man/systemd-hostnamed.8: man/systemd-hostnamed.service.8
-man/systemd-hostnamed.html: man/systemd-hostnamed.service.html
-	$(html-alias)
-
-endif
-
 if ENABLE_LOGIND
 MANPAGES += \
 	man/loginctl.1 \

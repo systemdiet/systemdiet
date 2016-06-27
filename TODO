@@ -154,8 +154,6 @@ Features:
 
 * we should properly escape ssh hostnames we add into dbus server strings
 
-* something pulls in pcre as so dep into our daemons such as hostnamed.
-
 * document systemd-journal-flush.service properly
 
 * change systemd-journal-flush into a service that stays around during
@@ -457,8 +455,6 @@ Features:
   waiting for the timeout
 
 * high level net_prio setting in execution context
-
-* hostnamed: before returning information from /etc/machine-info.conf check the modification data and reread.
 
 * currently x-systemd.timeout is lost in the initrd, since crypttab is copied into dracut, but fstab isn't
 
