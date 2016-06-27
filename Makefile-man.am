@@ -11,7 +11,6 @@ MANPAGES += \
 	man/journald.conf.5 \
 	man/kernel-command-line.7 \
 	man/kernel-install.8 \
-	man/locale.conf.5 \
 	man/localtime.5 \
 	man/machine-id.5 \
 	man/machine-info.5 \
@@ -658,18 +657,6 @@ MANPAGES_ALIAS += \
 	man/systemd-hostnamed.8
 man/systemd-hostnamed.8: man/systemd-hostnamed.service.8
 man/systemd-hostnamed.html: man/systemd-hostnamed.service.html
-	$(html-alias)
-
-endif
-
-if ENABLE_LOCALED
-MANPAGES += \
-	man/localectl.1 \
-	man/systemd-localed.service.8
-MANPAGES_ALIAS += \
-	man/systemd-localed.8
-man/systemd-localed.8: man/systemd-localed.service.8
-man/systemd-localed.html: man/systemd-localed.service.html
 	$(html-alias)
 
 endif

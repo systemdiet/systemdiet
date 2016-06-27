@@ -32,9 +32,6 @@ Fedora 20:
 
 * external: ps should gain colums for slice and machine
 
-* localed:
-  - localectl: support new converted x11→console keymaps
-
 * when installing fedora with yum --installroot /var/run is a directory, not a symlink
    https://bugzilla.redhat.com/show_bug.cgi?id=975864
 
@@ -217,7 +214,7 @@ Features:
 
 * maybe add a generator that looks for "systemd.run=" on the kernel cmdline for container usercases...
 
-* timedatctl, localectl: possibly make some commands work without the daemon, for chroot situations...
+* timedatctl: possibly make some commands work without the daemon, for chroot situations...
 
 * logind: add Suspend() bus calls which take timestamps to fix double suspend issues when somebody hits suspend and closes laptop quickly.
 
@@ -471,7 +468,7 @@ Features:
 
 * high level net_prio setting in execution context
 
-* hostnamed: before returning information from /etc/machine-info.conf check the modification data and reread. Similar for localed, ...
+* hostnamed: before returning information from /etc/machine-info.conf check the modification data and reread.
 
 * currently x-systemd.timeout is lost in the initrd, since crypttab is copied into dracut, but fstab isn't
 

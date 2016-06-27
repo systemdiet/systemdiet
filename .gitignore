@@ -11,12 +11,10 @@
 /install-tree
 /journalctl
 /libtool
-/localectl
 /loginctl
 /machinectl
 /mtd_probe
 /org.freedesktop.hostname1.xml
-/org.freedesktop.locale1.xml
 /org.freedesktop.systemd1.*.xml
 /org.freedesktop.timedate1.xml
 /scsi_id
@@ -51,7 +49,6 @@
 /systemd-journal-gatewayd
 /systemd-journald
 /systemd-kmsg-syslogd
-/systemd-localed
 /systemd-logind
 /systemd-machine-id-setup
 /systemd-machined
