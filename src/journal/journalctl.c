@@ -94,6 +94,7 @@ static bool arg_catalog = false;
 static bool arg_reverse = false;
 static int arg_journal_type = 0;
 static const char *arg_root = NULL;
+static const char *arg_machine = NULL;
 
 static enum {
         ACTION_SHOW,
@@ -166,6 +167,7 @@ static int help(void) {
                "Flags:\n"
                "     --system              Show only the system journal\n"
                "     --user                Show only the user journal for the current user\n"
+               "  -M --machine=CONTAINER   Operate on local container\n"
                "     --since=DATE          Start showing entries on or newer than the specified date\n"
                "     --until=DATE          Stop showing entries on or newer than the specified date\n"
                "  -c --cursor=CURSOR       Start showing entries from the specified cursor\n"
@@ -291,6 +293,7 @@ static int parse_argv(int argc, char *argv[]) {
                 { "dump-catalog",   no_argument,       NULL, ARG_DUMP_CATALOG   },
                 { "update-catalog", no_argument,       NULL, ARG_UPDATE_CATALOG },
                 { "reverse",        no_argument,       NULL, 'r'                },
+                { "machine",        required_argument, NULL, 'M'                },
                 { NULL,             0,                 NULL, 0                  }
         };
 
@@ -299,7 +302,7 @@ static int parse_argv(int argc, char *argv[]) {
         assert(argc >= 0);
         assert(argv);
 
-        while ((c = getopt_long(argc, argv, "hefo:aln::qmb::kD:p:c:u:F:xr", options, NULL)) >= 0) {
+        while ((c = getopt_long(argc, argv, "hefo:aln::qmb::kD:p:c:u:F:xrM:", options, NULL)) >= 0) {
 
                 switch (c) {
 
@@ -435,6 +438,10 @@ static int parse_argv(int argc, char *argv[]) {
 
                 case ARG_USER:
                         arg_journal_type |= SD_JOURNAL_CURRENT_USER;
+                        break;
+
+                case 'M':
+                        arg_machine = optarg;
                         break;
 
                 case 'D':
@@ -625,8 +632,8 @@ static int parse_argv(int argc, char *argv[]) {
         if (arg_follow && !arg_no_tail && arg_lines < 0)
                 arg_lines = 10;
 
-        if (arg_directory && arg_file) {
-                log_error("Please specify either -D/--directory= or --file=, not both.");
+        if (!!arg_directory + !!arg_file + !!arg_machine > 1) {
+                log_error("Please specify either -D/--directory= or --file= or -M/--machine=, not more than one.");
                 return -EINVAL;
         }
 
@@ -945,7 +952,7 @@ static int add_boot(sd_journal *j) {
                 return 0;
 
         if (arg_boot_offset == 0 && sd_id128_equal(arg_boot_id, SD_ID128_NULL))
-                return add_match_this_boot(j);
+                return add_match_this_boot(j, arg_machine);
 
         r = get_relative_boot_id(j, &arg_boot_id, arg_boot_offset);
         if (r < 0) {
@@ -1494,6 +1501,8 @@ int main(int argc, char *argv[]) {
                 r = sd_journal_open_directory(&j, arg_directory, arg_journal_type);
         else if (arg_file)
                 r = sd_journal_open_files(&j, (const char**) arg_file, 0);
+        else if (arg_machine)
+                r = sd_journal_open_container(&j, arg_machine, 0);
         else
                 r = sd_journal_open(&j, !arg_merge*SD_JOURNAL_LOCAL_ONLY + arg_journal_type);
         if (r < 0) {

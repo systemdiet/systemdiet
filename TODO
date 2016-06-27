@@ -42,6 +42,17 @@ CGroup Rework Completion:
 * implement system-wide DefaultCPUAccounting=1 switch (and similar for blockio, memory?)
 
 * implement per-slice CPUFairScheduling=1 switch
+* libsystemd-journal returns the object created as first param in sd_journal_new(), sd_bus_new() and suchlike as last...
+
+* cgroups:
+  - implement system-wide DefaultCPUAccounting=1 switch (and similar for blockio, memory?)
+  - implement per-slice CPUFairScheduling=1 switch
+  - handle jointly mounted controllers correctly
+  - introduce high-level settings for RT budget, swappiness
+  - how to reset dynamically changed unit cgroup attributes sanely?
+  - when reloading configuration, apply new cgroup configuration
+  - when recursively showing the cgroup hierarchy, optionally also show
+    the hierarchies of child processes
 
 * handle jointly mounted controllers correctly
 
