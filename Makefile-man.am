@@ -645,15 +645,6 @@ MANPAGES_ALIAS += \
 
 endif
 
-if ENABLE_COREDUMP
-MANPAGES += \
-	man/systemd-coredumpctl.1
-MANPAGES_ALIAS += \
-	#
-
-
-endif
-
 if ENABLE_LOGIND
 MANPAGES += \
 	man/loginctl.1 \

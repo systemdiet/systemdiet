@@ -659,14 +659,6 @@ AM_CONDITIONAL(ENABLE_LOGIND, [test "$have_logind" = "yes"])
 AS_IF([test "$have_logind" = "yes"], [ AC_DEFINE(HAVE_LOGIND, [1], [Logind support available]) ])
 
 # ------------------------------------------------------------------------------
-have_coredump=no
-AC_ARG_ENABLE(coredump, AS_HELP_STRING([--disable-coredump], [disable coredump hook]))
-if test "x$enable_coredump" != "xno"; then
-        have_coredump=yes
-fi
-AM_CONDITIONAL(ENABLE_COREDUMP, [test "$have_coredump" = "yes"])
-
-# ------------------------------------------------------------------------------
 have_polkit=no
 AC_ARG_ENABLE(polkit, AS_HELP_STRING([--disable-polkit], [disable PolicyKit support]))
 if test "x$enable_polkit" != "xno"; then
@@ -925,7 +917,6 @@ AC_MSG_RESULT([
         randomseed:              ${have_randomseed}
         backlight:               ${have_backlight}
         logind:                  ${have_logind}
-        coredump:                ${have_coredump}
         polkit:                  ${have_polkit}
         kmod:                    ${have_kmod}
         blkid:                   ${have_blkid}

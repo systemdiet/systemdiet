@@ -2889,48 +2889,6 @@ EXTRA_DIST += \
 	units/systemd-journal-gatewayd.service.in
 
 # ------------------------------------------------------------------------------
-if ENABLE_COREDUMP
-systemd_coredump_SOURCES = \
-	src/journal/coredump.c
-
-if ENABLE_LOGIND
-systemd_coredump_LDADD = \
-	libsystemd-journal-internal.la \
-	libsystemd-label.la \
-	libsystemd-shared.la
-endif
-
-rootlibexec_PROGRAMS += \
-	systemd-coredump
-
-systemd_coredumpctl_SOURCES = \
-	src/journal/coredumpctl.c
-
-systemd_coredumpctl_LDADD = \
-	libsystemd-journal-internal.la \
-	libsystemd-internal.la \
-	libsystemd-shared.la
-
-bin_PROGRAMS += \
-	systemd-coredumpctl
-
-dist_bashcompletion_DATA += \
-	shell-completion/bash/systemd-coredumpctl
-
-dist_zshcompletion_DATA += \
-	shell-completion/zsh/_systemd-coredumpctl
-
-sysctl_DATA = \
-	sysctl.d/50-coredump.conf
-
-CLEANFILES += \
-	sysctl.d/50-coredump.conf
-endif
-
-EXTRA_DIST += \
-	sysctl.d/50-coredump.conf.in
-
-# ------------------------------------------------------------------------------
 if ENABLE_BINFMT
 systemd_binfmt_SOURCES = \
 	src/binfmt/binfmt.c

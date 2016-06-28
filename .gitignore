@@ -28,8 +28,6 @@
 /systemd-cgls
 /systemd-cgroups-agent
 /systemd-cgtop
-/systemd-coredump
-/systemd-coredumpctl
 /systemd-cryptsetup
 /systemd-cryptsetup-generator
 /systemd-delta
