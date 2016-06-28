@@ -733,15 +733,6 @@ man/systemd-journal-gatewayd.socket.html: man/systemd-journal-gatewayd.service.h
 
 endif
 
-if HAVE_MYHOSTNAME
-MANPAGES += \
-	man/nss-myhostname.8
-MANPAGES_ALIAS += \
-	#
-
-
-endif
-
 if HAVE_PAM
 MANPAGES += \
 	man/pam_systemd.8 \
