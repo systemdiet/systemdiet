@@ -123,8 +123,6 @@ pkgconfiglib_DATA =
 polkitpolicy_in_in_files =
 polkitpolicy_in_files =
 polkitpolicy_files =
-dist_udevrules_DATA =
-nodist_udevrules_DATA =
 dist_pkgsysconf_DATA =
 dist_pkgdata_DATA =
 dist_dbuspolicy_DATA =
@@ -2181,28 +2179,7 @@ libudev_private_la_LIBADD = \
 
 # ------------------------------------------------------------------------------
 INSTALL_DIRS += \
-	$(sysconfdir)/udev/rules.d \
 	$(sysconfdir)/udev/hwdb.d
-
-dist_udevrules_DATA += \
-	rules/42-usb-hid-pm.rules \
-	rules/50-udev-default.rules \
-	rules/60-drm.rules \
-	rules/60-keyboard.rules \
-	rules/60-persistent-storage-tape.rules \
-	rules/60-persistent-serial.rules \
-	rules/60-persistent-input.rules \
-	rules/60-persistent-alsa.rules \
-	rules/60-persistent-storage.rules \
-	rules/64-btrfs.rules \
-	rules/75-net-description.rules \
-	rules/75-tty-description.rules \
-	rules/78-sound-card.rules \
-	rules/80-net-name-slot.rules \
-	rules/95-udev-late.rules
-
-nodist_udevrules_DATA += \
-	rules/99-systemd.rules
 
 dist_udevhwdb_DATA = \
 	hwdb/20-pci-vendor-model.hwdb \
@@ -2223,11 +2200,9 @@ sharepkgconfig_DATA = \
 	src/udev/udev.pc
 
 EXTRA_DIST += \
-	rules/99-systemd.rules.in \
 	src/udev/udev.pc.in
 
 CLEANFILES += \
-	rules/99-systemd.rules \
 	src/udev/udev.pc
 
 EXTRA_DIST += \
@@ -2317,17 +2292,11 @@ libudev_core_la_CPPFLAGS = \
 if ENABLE_FIRMWARE
 libudev_core_la_SOURCES += \
 	src/udev/udev-builtin-firmware.c
-
-dist_udevrules_DATA += \
-	rules/50-firmware.rules
 endif
 
 if HAVE_KMOD
 libudev_core_la_SOURCES += \
 	src/udev/udev-builtin-kmod.c
-
-dist_udevrules_DATA += \
-	rules/80-drivers.rules
 endif
 
 if HAVE_BLKID
@@ -2452,9 +2421,6 @@ cdrom_id_LDADD = \
 udevlibexec_PROGRAMS += \
 	cdrom_id
 
-dist_udevrules_DATA += \
-	rules/60-cdrom_id.rules
-
 # ------------------------------------------------------------------------------
 collect_SOURCES = \
 	src/udev/collect/collect.c
@@ -2492,9 +2458,6 @@ v4l_id_LDADD = \
 udevlibexec_PROGRAMS += \
 	v4l_id
 
-dist_udevrules_DATA += \
-	rules/60-persistent-v4l.rules
-
 # ------------------------------------------------------------------------------
 accelerometer_SOURCES = \
 	src/udev/accelerometer/accelerometer.c
@@ -2506,9 +2469,6 @@ accelerometer_LDADD = \
 udevlibexec_PROGRAMS += \
 	accelerometer
 
-dist_udevrules_DATA += \
-	rules/61-accelerometer.rules
-
 # ------------------------------------------------------------------------------
 mtd_probe_SOURCES =  \
 	src/udev/mtd_probe/mtd_probe.c \
@@ -2517,9 +2477,6 @@ mtd_probe_SOURCES =  \
 
 mtd_probe_CPPFLAGS = \
 	$(AM_CPPFLAGS)
-
-dist_udevrules_DATA += \
-	rules/75-probe_mtd.rules
 
 udevlibexec_PROGRAMS += \
 	mtd_probe
@@ -3288,18 +3245,8 @@ systemd_multi_seat_x_LDADD = \
 rootlibexec_PROGRAMS += \
 	systemd-multi-seat-x
 
-dist_udevrules_DATA += \
-	src/login/70-uaccess.rules \
-	src/login/70-power-switch.rules
-
-nodist_udevrules_DATA += \
-	src/login/71-seat.rules \
-	src/login/73-seat-late.rules
-
 CLEANFILES += \
-	src/login/logind-gperf.c \
-	src/login/71-seat.rules \
-	src/login/73-seat-late.rules
+	src/login/logind-gperf.c
 endif
 
 polkitpolicy_in_files += \
@@ -3307,8 +3254,6 @@ polkitpolicy_in_files += \
 
 EXTRA_DIST += \
 	src/login/logind-gperf.gperf \
-	src/login/71-seat.rules.in \
-	src/login/73-seat-late.rules.in \
 	units/systemd-logind.service.in \
 	units/systemd-user-sessions.service.in
 
@@ -3501,9 +3446,6 @@ src/%.policy.in: src/%.policy.in.in Makefile
 	$(SED_PROCESS)
 
 shell-completion/%: shell-completion/%.in
-	$(SED_PROCESS)
-
-%.rules: %.rules.in Makefile
 	$(SED_PROCESS)
 
 %.sh: %.sh.in Makefile
