@@ -808,19 +808,6 @@ AC_ARG_WITH([dbusinterfacedir],
         [],
         [with_dbusinterfacedir=$(readlink -m $($PKG_CONFIG --variable=session_bus_services_dir dbus-1)/../interfaces)])
 
-AC_ARG_WITH([bashcompletiondir],
-        AS_HELP_STRING([--with-bashcompletiondir=DIR], [Bash completions directory]),
-        [],
-        [AS_IF([$($PKG_CONFIG --exists bash-completion)], [
-                with_bashcompletiondir=$($PKG_CONFIG --variable=completionsdir bash-completion)
-        ] , [
-                with_bashcompletiondir=${datadir}/bash-completion/completions
-        ])])
-
-AC_ARG_WITH([zshcompletiondir],
-        AS_HELP_STRING([--with-zshcompletiondir=DIR], [Zsh completions directory]),
-        [], [with_zshcompletiondir=${datadir}/zsh/site-functions])
-
 AC_ARG_WITH([rootprefix],
         AS_HELP_STRING([--with-rootprefix=DIR], [rootfs directory prefix for config files and kernel modules]),
         [], [with_rootprefix=${ac_default_prefix}])

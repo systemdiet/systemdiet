@@ -70,8 +70,6 @@ pamconfdir=@pamconfdir@
 pkgconfigdatadir=$(datadir)/pkgconfig
 pkgconfiglibdir=$(libdir)/pkgconfig
 polkitpolicydir=$(datadir)/polkit-1/actions
-bashcompletiondir=@bashcompletiondir@
-zshcompletiondir=@zshcompletiondir@
 rpmmacrosdir=$(prefix)/lib/rpm/macros.d
 sysvinitdir=$(SYSTEM_SYSVINIT_PATH)
 sysvrcnddir=$(SYSTEM_SYSVRCND_PATH)
@@ -354,44 +352,6 @@ systemd_analyze_CFLAGS = \
 systemd_analyze_LDADD = \
 	libsystemd-shared.la \
 	libsystemd-dbus.la
-
-dist_bashcompletion_DATA = \
-	shell-completion/bash/journalctl \
-	shell-completion/bash/systemd-analyze \
-	shell-completion/bash/systemd-cat \
-	shell-completion/bash/systemd-cgls \
-	shell-completion/bash/systemd-cgtop \
-	shell-completion/bash/systemd-delta \
-	shell-completion/bash/systemd-detect-virt \
-	shell-completion/bash/systemd-run \
-	shell-completion/bash/udevadm \
-	shell-completion/bash/kernel-install
-
-nodist_bashcompletion_DATA = \
-	shell-completion/bash/systemctl
-
-dist_zshcompletion_DATA = \
-	shell-completion/zsh/_journalctl \
-	shell-completion/zsh/_udevadm \
-	shell-completion/zsh/_kernel-install \
-	shell-completion/zsh/_systemd-analyze \
-	shell-completion/zsh/_systemd-run \
-	shell-completion/zsh/_sd_hosts_or_user_at_host \
-	shell-completion/zsh/_sd_outputmodes \
-	shell-completion/zsh/_sd_unit_files \
-	shell-completion/zsh/_systemd-delta \
-	shell-completion/zsh/_systemd
-
-nodist_zshcompletion_DATA = \
-	shell-completion/zsh/_systemctl
-
-EXTRA_DIST += \
-	shell-completion/bash/systemctl.in \
-	shell-completion/zsh/_systemctl.in
-
-CLEANFILES += \
-	$(nodist_bashcompletion_DATA) \
-	$(nodist_zshcompletion_DATA)
 
 dist_sysctl_DATA = \
 	sysctl.d/50-default.conf
@@ -1641,9 +1601,6 @@ endif
 SYSINIT_TARGET_WANTS += \
 	systemd-tmpfiles-setup-dev.service \
 	systemd-tmpfiles-setup.service
-
-dist_zshcompletion_DATA += \
-	shell-completion/zsh/_systemd-tmpfiles
 
 TIMERS_TARGET_WANTS += \
 	systemd-tmpfiles-clean.timer
@@ -3086,13 +3043,6 @@ loginctl_LDADD = \
 rootbin_PROGRAMS += \
 	loginctl
 
-dist_bashcompletion_DATA += \
-	shell-completion/bash/loginctl
-
-dist_zshcompletion_DATA += \
-	shell-completion/zsh/_loginctl \
-	shell-completion/zsh/_systemd-inhibit
-
 systemd_inhibit_SOURCES = \
 	src/login/inhibit.c
 
@@ -3419,9 +3369,6 @@ src/core/macros.%: src/core/macros.%.in Makefile
 	$(SED_PROCESS)
 
 src/%.policy.in: src/%.policy.in.in Makefile
-	$(SED_PROCESS)
-
-shell-completion/%: shell-completion/%.in
 	$(SED_PROCESS)
 
 %.sh: %.sh.in Makefile
