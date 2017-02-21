@@ -239,6 +239,8 @@ AM_V_RM = $(AM_V_RM_$(V))
 AM_V_RM_ = $(AM_V_RM_$(AM_DEFAULT_VERBOSITY))
 AM_V_RM_0 = @echo "  RM      " $@;
 
+FIXUP_GPERF = sed -e 's/\(char \*str, .*\)unsigned\(.*\) len/\1size_t len/'
+
 # ------------------------------------------------------------------------------
 rootbin_PROGRAMS = \
 	systemctl \
@@ -820,7 +822,7 @@ src/core/syscall-from-name.gperf: src/core/syscall-list.txt Makefile
 
 src/core/syscall-from-name.h: src/core/syscall-from-name.gperf Makefile
 	$(AM_V_at)$(MKDIR_P) $(dir $@)
-	$(AM_V_GPERF)$(GPERF) -L ANSI-C -t --ignore-case -N lookup_syscall -H hash_syscall_name -p -C < $< > $@
+	$(AM_V_GPERF)$(GPERF) -L ANSI-C -t --ignore-case -N lookup_syscall -H hash_syscall_name -p -C < $< | $(FIXUP_GPERF) > $@
 
 src/core/syscall-to-name.h: src/core/syscall-list.txt Makefile
 	$(AM_V_at)$(MKDIR_P) $(dir $@)
@@ -1907,7 +1909,7 @@ src/udev/keyboard-keys-from-name.gperf: src/udev/keyboard-keys.txt Makefile
 	$(AM_V_GEN)$(AWK) 'BEGIN{ print "struct key { const char* name; unsigned short id; };"; print "%null-strings"; print "%%";} { print tolower(substr($$1 ,5)) ", " $$1 }' < $< > $@
 
 src/udev/keyboard-keys-from-name.h: src/udev/keyboard-keys-from-name.gperf Makefile
-	$(AM_V_GPERF)$(GPERF) -L ANSI-C -t -N keyboard_lookup_key -H hash_key_name -p -C < $< > $@
+	$(AM_V_GPERF)$(GPERF) -L ANSI-C -t -N keyboard_lookup_key -H hash_key_name -p -C < $< | $(FIXUP_GPERF) > $@
 
 src/udev/keyboard-keys-to-name.h: src/udev/keyboard-keys.txt Makefile
 	$(AM_V_GEN)$(AWK) 'BEGIN{ print "const char* const key_names[KEY_CNT] = { "} { print "[" $$1 "] = \"" $$1 "\"," } END{print "};"}' < $< > $@
@@ -3002,7 +3004,7 @@ src/%.policy.in: src/%.policy.in.in Makefile
 
 src/%.c: src/%.gperf
 	$(AM_V_at)$(MKDIR_P) $(dir $@)
-	$(AM_V_GPERF)$(GPERF) < $< > $@
+	$(AM_V_GPERF)$(GPERF) < $< | $(FIXUP_GPERF) > $@
 
 src/%: src/%.m4
 	$(AM_V_at)$(MKDIR_P) $(dir $@)
