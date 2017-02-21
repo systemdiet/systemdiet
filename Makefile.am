@@ -213,70 +213,11 @@ endef
 
 INSTALL_DIRS =
 
-RUNLEVEL1_TARGET_WANTS =
-RUNLEVEL2_TARGET_WANTS =
-RUNLEVEL3_TARGET_WANTS =
-RUNLEVEL4_TARGET_WANTS =
-RUNLEVEL5_TARGET_WANTS =
-SHUTDOWN_TARGET_WANTS =
-LOCAL_FS_TARGET_WANTS =
-MULTI_USER_TARGET_WANTS =
-SYSINIT_TARGET_WANTS =
-SOCKETS_TARGET_WANTS =
-TIMERS_TARGET_WANTS =
-
-SYSTEM_UNIT_ALIASES =
-USER_UNIT_ALIASES =
-
-GENERAL_ALIASES =
-
-install-target-wants-hook:
-	what="$(RUNLEVEL1_TARGET_WANTS)" && wants=runlevel1.target && $(add-wants)
-	what="$(RUNLEVEL2_TARGET_WANTS)" && wants=runlevel2.target && $(add-wants)
-	what="$(RUNLEVEL3_TARGET_WANTS)" && wants=runlevel3.target && $(add-wants)
-	what="$(RUNLEVEL4_TARGET_WANTS)" && wants=runlevel4.target && $(add-wants)
-	what="$(RUNLEVEL5_TARGET_WANTS)" && wants=runlevel5.target && $(add-wants)
-	what="$(SHUTDOWN_TARGET_WANTS)" && wants=shutdown.target && $(add-wants)
-	what="$(LOCAL_FS_TARGET_WANTS)" && wants=local-fs.target && $(add-wants)
-	what="$(MULTI_USER_TARGET_WANTS)" && wants=multi-user.target && $(add-wants)
-	what="$(SYSINIT_TARGET_WANTS)" && wants=sysinit.target && $(add-wants)
-	what="$(SOCKETS_TARGET_WANTS)" && wants=sockets.target && $(add-wants)
-	what="$(TIMERS_TARGET_WANTS)" && wants=timers.target && $(add-wants)
-	what="$(SLICES_TARGET_WANTS)" && wants=slices.target && $(add-wants)
-
-define add-wants
-	[ -z "$$what" ] || ( \
-	  dir=$(DESTDIR)$(systemunitdir)/$$wants.wants && \
-	  $(MKDIR_P) -m 0755 $$dir && \
-	  cd $$dir && \
-	  rm -f $$what && \
-	  for i in $$what; do $(LN_S) ../$$i . || exit $$? ; done )
-endef
-
 install-directories-hook:
 	$(MKDIR_P) $(addprefix $(DESTDIR),$(INSTALL_DIRS))
 
-install-aliases-hook:
-	set -- $(SYSTEM_UNIT_ALIASES) && \
-		dir=$(systemunitdir) && $(install-aliases)
-	set -- $(USER_UNIT_ALIASES) && \
-		dir=$(userunitdir) && $(install-aliases)
-	set -- $(GENERAL_ALIASES) && \
-		dir= && $(install-aliases)
-
-define install-aliases
-	while [ -n "$$1" ]; do \
-		$(MKDIR_P) `dirname $(DESTDIR)$$dir/$$2` && \
-		rm -f $(DESTDIR)$$dir/$$2 && \
-		$(LN_S) $$1 $(DESTDIR)$$dir/$$2 && \
-		shift 2 || exit $$?; \
-	done
-endef
-
 INSTALL_EXEC_HOOKS += \
-	install-target-wants-hook \
-	install-directories-hook \
-	install-aliases-hook
+	install-directories-hook
 
 # ------------------------------------------------------------------------------
 AM_V_M4 = $(AM_V_M4_$(V))
@@ -356,172 +297,10 @@ systemd_analyze_LDADD = \
 dist_sysctl_DATA = \
 	sysctl.d/50-default.conf
 
-dist_systemunit_DATA = \
-	units/graphical.target \
-	units/multi-user.target \
-	units/emergency.service \
-	units/emergency.target \
-	units/sysinit.target \
-	units/basic.target \
-	units/getty.target \
-	units/halt.target \
-	units/kexec.target \
-	units/local-fs.target \
-	units/local-fs-pre.target \
-	units/initrd.target \
-	units/initrd-fs.target \
-	units/initrd-root-fs.target \
-	units/remote-fs.target \
-	units/remote-fs-pre.target \
-	units/network.target \
-	units/network-online.target \
-	units/nss-lookup.target \
-	units/nss-user-lookup.target \
-	units/hibernate.target \
-	units/hybrid-sleep.target \
-	units/poweroff.target \
-	units/reboot.target \
-	units/rescue.target \
-	units/rpcbind.target \
-	units/time-sync.target \
-	units/shutdown.target \
-	units/final.target \
-	units/umount.target \
-	units/sigpwr.target \
-	units/sleep.target \
-	units/sockets.target \
-	units/timers.target \
-	units/paths.target \
-	units/suspend.target \
-	units/swap.target \
-	units/slices.target \
-	units/system.slice \
-	units/x-.slice \
-	units/systemd-initctl.socket \
-	units/systemd-shutdownd.socket \
-	units/syslog.socket \
-	units/dev-hugepages.mount \
-	units/dev-mqueue.mount \
-	units/sys-kernel-config.mount \
-	units/sys-kernel-debug.mount \
-	units/sys-fs-fuse-connections.mount \
-	units/tmp.mount \
-	units/printer.target \
-	units/sound.target \
-	units/bluetooth.target \
-	units/smartcard.target \
-	units/systemd-ask-password-wall.path \
-	units/systemd-ask-password-console.path \
-	units/systemd-udevd-control.socket \
-	units/systemd-udevd-kernel.socket \
-	units/system-update.target \
-	units/initrd-switch-root.target
-
-nodist_systemunit_DATA = \
-	units/getty@.service \
-	units/serial-getty@.service \
-	units/console-shell.service \
-	units/console-getty.service \
-	units/systemd-initctl.service \
-	units/systemd-shutdownd.service \
-	units/systemd-remount-fs.service \
-	units/systemd-update-utmp.service \
-	units/systemd-update-utmp-runlevel.service \
-	units/systemd-ask-password-wall.service \
-	units/systemd-ask-password-console.service \
-	units/systemd-sysctl.service \
-	units/emergency.service \
-	units/rescue.service \
-	units/user@.service \
-	units/systemd-hibernate.service \
-	units/systemd-hybrid-sleep.service \
-	units/systemd-suspend.service \
-	units/systemd-halt.service \
-	units/systemd-poweroff.service \
-	units/systemd-reboot.service \
-	units/systemd-kexec.service \
-	units/systemd-fsck@.service \
-	units/systemd-fsck-root.service \
-	units/systemd-udevd.service \
-	units/systemd-udev-trigger.service \
-	units/systemd-udev-settle.service \
-	units/debug-shell.service \
-	units/initrd-parse-etc.service \
-	units/initrd-cleanup.service \
-	units/initrd-udevadm-cleanup-db.service \
-	units/initrd-switch-root.service
-
-dist_userunit_DATA = \
-	units/user/default.target \
-	units/user/exit.target
-
-nodist_userunit_DATA = \
-	units/user/systemd-exit.service
-
-EXTRA_DIST += \
-	units/getty@.service.m4 \
-	units/serial-getty@.service.m4 \
-	units/console-shell.service.m4.in \
-	units/console-getty.service.m4.in \
-	units/rescue.service.in \
-	units/systemd-initctl.service.in \
-	units/systemd-shutdownd.service.in \
-	units/systemd-remount-fs.service.in \
-	units/systemd-update-utmp.service.in \
-	units/systemd-update-utmp-runlevel.service.in \
-	units/systemd-ask-password-wall.service.in \
-	units/systemd-ask-password-console.service.in \
-	units/systemd-sysctl.service.in \
-	units/emergency.service.in \
-	units/systemd-halt.service.in \
-	units/systemd-poweroff.service.in \
-	units/systemd-reboot.service.in \
-	units/systemd-kexec.service.in \
-	units/user/systemd-exit.service.in \
-	units/systemd-fsck@.service.in \
-	units/systemd-fsck-root.service.in \
-	units/user@.service.in \
-	units/systemd-udevd.service \
-	units/systemd-udev-trigger.service \
-	units/systemd-udev-settle.service \
-	units/debug-shell.service.in \
-	units/systemd-hibernate.service.in \
-	units/systemd-hybrid-sleep.service.in \
-	units/systemd-suspend.service.in \
-	units/quotaon.service.in \
-	units/initrd-parse-etc.service.in \
-	units/initrd-cleanup.service.in \
-	units/initrd-udevadm-cleanup-db.service.in \
-	units/initrd-switch-root.service.in \
-	introspect.awk
-
-CLEANFILES += \
-	units/console-shell.service.m4 \
-	units/console-getty.service.m4
-
 if HAVE_SYSV_COMPAT
-nodist_systemunit_DATA += \
-	units/rc-local.service \
-	units/halt-local.service
-
 systemgenerator_PROGRAMS += \
 	systemd-rc-local-generator
 endif
-
-EXTRA_DIST += \
-	units/rc-local.service.in \
-	units/halt-local.service.in
-
-# automake is broken and can't handle files with a dash in front
-# http://debbugs.gnu.org/cgi/bugreport.cgi?bug=14728#8
-units-install-hook:
-	mv $(DESTDIR)$(systemunitdir)/x-.slice $(DESTDIR)/$(systemunitdir)/-.slice
-
-units-uninstall-hook:
-	rm -f $(DESTDIR)/$(systemunitdir)/-.slice
-
-INSTALL_DATA_HOOKS += units-install-hook
-UNINSTALL_DATA_HOOKS += units-uninstall-hook
 
 dist_doc_DATA = \
 	README \
@@ -1544,24 +1323,7 @@ systemd_modules_load_LDADD = \
 rootlibexec_PROGRAMS += \
 	systemd-modules-load
 
-nodist_systemunit_DATA += \
-	units/systemd-modules-load.service
-
-SYSINIT_TARGET_WANTS += \
-	systemd-modules-load.service
-
-if ENABLE_TMPFILES
-nodist_systemunit_DATA += \
-	units/kmod-static-nodes.service
-
-SYSINIT_TARGET_WANTS += \
-	kmod-static-nodes.service
 endif
-endif
-
-EXTRA_DIST += \
-        units/systemd-modules-load.service.in \
-        units/kmod-static-nodes.service.in
 
 # ------------------------------------------------------------------------------
 if ENABLE_TMPFILES
@@ -1579,14 +1341,6 @@ systemd_tmpfiles_LDADD = \
 rootbin_PROGRAMS += \
 	systemd-tmpfiles
 
-dist_systemunit_DATA += \
-	units/systemd-tmpfiles-clean.timer
-
-nodist_systemunit_DATA += \
-	units/systemd-tmpfiles-setup-dev.service \
-	units/systemd-tmpfiles-setup.service \
-	units/systemd-tmpfiles-clean.service
-
 dist_tmpfiles_DATA = \
 	tmpfiles.d/systemd.conf \
 	tmpfiles.d/systemd-nologin.conf \
@@ -1598,22 +1352,10 @@ dist_tmpfiles_DATA += \
 	tmpfiles.d/legacy.conf
 endif
 
-SYSINIT_TARGET_WANTS += \
-	systemd-tmpfiles-setup-dev.service \
-	systemd-tmpfiles-setup.service
-
-TIMERS_TARGET_WANTS += \
-	systemd-tmpfiles-clean.timer
-
 INSTALL_DIRS += \
 	$(tmpfilesdir) \
 	$(sysconfdir)/tmpfiles.d
 endif
-
-EXTRA_DIST += \
-	units/systemd-tmpfiles-setup-dev.service.in \
-	units/systemd-tmpfiles-setup.service.in \
-	units/systemd-tmpfiles-clean.service.in
 
 # ------------------------------------------------------------------------------
 systemd_machine_id_setup_SOURCES = \
@@ -2148,23 +1890,6 @@ EXTRA_DIST += \
 
 CLEANFILES += \
 	src/udev/udev.pc
-
-EXTRA_DIST += \
-	units/systemd-udevd.service.in \
-	units/systemd-udev-trigger.service.in \
-	units/systemd-udev-settle.service.in
-
-CLEANFILES += \
-	units/systemd-udevd.service \
-	units/systemd-udev-trigger.service \
-	units/systemd-udev-settle.service
-
-SOCKETS_TARGET_WANTS += \
-	systemd-udevd-control.socket \
-	systemd-udevd-kernel.socket
-SYSINIT_TARGET_WANTS += \
-	systemd-udevd.service \
-	systemd-udev-trigger.service
 
 rootbin_PROGRAMS += \
 	udevadm
@@ -2713,28 +2438,13 @@ rootbin_PROGRAMS += \
 bin_PROGRAMS += \
 	systemd-cat
 
-dist_systemunit_DATA += \
-	units/systemd-journald.socket
-
-nodist_systemunit_DATA += \
-	units/systemd-journald.service \
-	units/systemd-journal-flush.service
-
 dist_pkgsysconf_DATA += \
 	src/journal/journald.conf
 
 dist_catalog_DATA = \
 	catalog/systemd.catalog
 
-SOCKETS_TARGET_WANTS += \
-	systemd-journald.socket
-SYSINIT_TARGET_WANTS += \
-	systemd-journald.service \
-	systemd-journal-flush.service
-
 EXTRA_DIST += \
-	units/systemd-journald.service.in \
-	units/systemd-journal-flush.service.in \
 	src/journal/journald-gperf.gperf
 
 CLEANFILES += \
@@ -2764,19 +2474,10 @@ systemd_journal_gatewayd_CFLAGS = \
 	$(AM_CFLAGS) \
 	$(MICROHTTPD_CFLAGS)
 
-dist_systemunit_DATA += \
-	units/systemd-journal-gatewayd.socket
-
-nodist_systemunit_DATA += \
-	units/systemd-journal-gatewayd.service
-
 dist_gatewayddocumentroot_DATA = \
 	src/journal/browse.html
 
 endif
-
-EXTRA_DIST += \
-	units/systemd-journal-gatewayd.service.in
 
 # ------------------------------------------------------------------------------
 if ENABLE_BINFMT
@@ -2789,25 +2490,11 @@ systemd_binfmt_LDADD = \
 rootlibexec_PROGRAMS += \
 	systemd-binfmt
 
-dist_systemunit_DATA += \
-	units/proc-sys-fs-binfmt_misc.automount \
-	units/proc-sys-fs-binfmt_misc.mount
-
-nodist_systemunit_DATA += \
-	units/systemd-binfmt.service
-
 INSTALL_DIRS += \
 	$(prefix)/lib/binfmt.d \
 	$(sysconfdir)/binfmt.d
 
-SYSINIT_TARGET_WANTS += \
-	systemd-binfmt.service \
-	proc-sys-fs-binfmt_misc.automount
-
 endif
-
-EXTRA_DIST += \
-	units/systemd-binfmt.service.in
 
 # ------------------------------------------------------------------------------
 if ENABLE_VCONSOLE
@@ -2819,16 +2506,7 @@ systemd_vconsole_setup_LDADD = \
 
 rootlibexec_PROGRAMS += \
 	systemd-vconsole-setup
-
-nodist_systemunit_DATA += \
-	units/systemd-vconsole-setup.service
-
-SYSINIT_TARGET_WANTS += \
-	systemd-vconsole-setup.service
 endif
-
-EXTRA_DIST += \
-	units/systemd-vconsole-setup.service.in
 
 # ------------------------------------------------------------------------------
 if ENABLE_BOOTCHART
@@ -2856,9 +2534,6 @@ if ENABLE_QUOTACHECK
 rootlibexec_PROGRAMS += \
 	systemd-quotacheck
 
-nodist_systemunit_DATA += \
-	units/systemd-quotacheck.service
-
 systemd_quotacheck_SOURCES = \
 	src/quotacheck/quotacheck.c
 
@@ -2866,19 +2541,10 @@ systemd_quotacheck_LDADD = \
 	libsystemd-shared.la
 endif
 
-EXTRA_DIST += \
-	units/systemd-quotacheck.service.in
-
-nodist_systemunit_DATA += \
-	units/quotaon.service
-
 # ------------------------------------------------------------------------------
 if ENABLE_RANDOMSEED
 rootlibexec_PROGRAMS += \
 	systemd-random-seed
-
-nodist_systemunit_DATA += \
-	units/systemd-random-seed.service
 
 systemd_random_seed_SOURCES = \
 	src/random-seed/random-seed.c
@@ -2886,22 +2552,12 @@ systemd_random_seed_SOURCES = \
 systemd_random_seed_LDADD = \
 	libsystemd-label.la \
 	libsystemd-shared.la
-
-SYSINIT_TARGET_WANTS += \
-	systemd-random-seed.service
-
 endif
-
-EXTRA_DIST += \
-	units/systemd-random-seed.service.in
 
 # ------------------------------------------------------------------------------
 if ENABLE_BACKLIGHT
 rootlibexec_PROGRAMS += \
 	systemd-backlight
-
-nodist_systemunit_DATA += \
-	units/systemd-backlight@.service
 
 systemd_backlight_SOURCES = \
 	src/backlight/backlight.c
@@ -2912,9 +2568,6 @@ systemd_backlight_LDADD = \
 	libudev-private.la
 endif
 
-EXTRA_DIST += \
-	units/systemd-backlight@.service.in
-
 # ------------------------------------------------------------------------------
 if HAVE_LIBCRYPTSETUP
 rootlibexec_PROGRAMS += \
@@ -2922,10 +2575,6 @@ rootlibexec_PROGRAMS += \
 
 systemgenerator_PROGRAMS += \
 	systemd-cryptsetup-generator
-
-dist_systemunit_DATA += \
-	units/cryptsetup.target \
-	units/cryptsetup-pre.target
 
 systemd_cryptsetup_SOURCES = \
 	src/cryptsetup/cryptsetup.c
@@ -2946,10 +2595,6 @@ systemd_cryptsetup_generator_SOURCES = \
 systemd_cryptsetup_generator_LDADD = \
 	libsystemd-label.la \
 	libsystemd-shared.la
-
-SYSINIT_TARGET_WANTS += \
-	cryptsetup.target
-
 endif
 
 # ------------------------------------------------------------------------------
@@ -3132,13 +2777,6 @@ dist_pamconf_DATA = \
 	src/login/systemd-user
 endif
 
-nodist_systemunit_DATA += \
-	units/systemd-logind.service \
-	units/systemd-user-sessions.service
-
-dist_systemunit_DATA += \
-	units/user.slice
-
 dist_dbussystemservice_DATA += \
 	src/login/org.freedesktop.login1.service
 
@@ -3153,13 +2791,6 @@ polkitpolicy_files += \
 
 INSTALL_DIRS += \
 	$(systemdstatedir)
-
-MULTI_USER_TARGET_WANTS += \
-	systemd-logind.service \
-	systemd-user-sessions.service
-
-SYSTEM_UNIT_ALIASES += \
-	systemd-logind.service dbus-org.freedesktop.login1.service
 
 systemd_multi_seat_x_SOURCES = \
 	src/login/multi-seat-x.c
@@ -3179,9 +2810,7 @@ polkitpolicy_in_files += \
 	src/login/org.freedesktop.login1.policy.in
 
 EXTRA_DIST += \
-	src/login/logind-gperf.gperf \
-	units/systemd-logind.service.in \
-	units/systemd-user-sessions.service.in
+	src/login/logind-gperf.gperf
 
 # ------------------------------------------------------------------------------
 # compat libs
@@ -3353,9 +2982,6 @@ SED_PROCESS = \
 	$(SED) $(subst '|,-e 's|@,$(subst =,\@|,$(subst |',|g',$(substitutions)))) \
 		< $< > $@
 
-units/%: units/%.in Makefile
-	$(SED_PROCESS)
-
 man/%: man/%.in Makefile
 	$(SED_PROCESS)
 
@@ -3382,14 +3008,6 @@ src/%.c: src/%.gperf
 src/%: src/%.m4
 	$(AM_V_at)$(MKDIR_P) $(dir $@)
 	$(AM_V_M4)$(M4) -P $(M4_DEFINES) < $< > $@
-
-units/%: units/%.m4 Makefile
-	$(AM_V_M4)$(MKDIR_P) $(dir $@)
-	$(AM_V_M4)$(M4) -P $(M4_DEFINES) -DFOR_SYSTEM=1 < $< > $@
-
-units/user/%: units/%.m4 Makefile
-	$(AM_V_M4)$(MKDIR_P) $(dir $@)
-	$(AM_V_M4)$(M4) -P $(M4_DEFINES) -DFOR_USER=1 < $< > $@
 
 if ENABLE_POLKIT
 nodist_polkitpolicy_DATA = \
@@ -3490,81 +3108,6 @@ EXTRA_DIST += \
 	docs/sysvinit/README.in \
 	docs/var-log/README.in
 
-SOCKETS_TARGET_WANTS += \
-	systemd-initctl.socket \
-	systemd-shutdownd.socket
-
-if HAVE_SYSV_COMPAT
-RUNLEVEL1_TARGET_WANTS += \
-	systemd-update-utmp-runlevel.service
-RUNLEVEL2_TARGET_WANTS += \
-	systemd-update-utmp-runlevel.service
-RUNLEVEL3_TARGET_WANTS += \
-	systemd-update-utmp-runlevel.service
-RUNLEVEL4_TARGET_WANTS += \
-	systemd-update-utmp-runlevel.service
-RUNLEVEL5_TARGET_WANTS += \
-	systemd-update-utmp-runlevel.service
-endif
-SYSINIT_TARGET_WANTS += \
-	systemd-update-utmp.service
-LOCAL_FS_TARGET_WANTS += \
-	systemd-remount-fs.service \
-	systemd-fsck-root.service \
-	tmp.mount
-MULTI_USER_TARGET_WANTS += \
-	getty.target \
-	systemd-ask-password-wall.path
-SYSINIT_TARGET_WANTS += \
-	dev-hugepages.mount \
-	dev-mqueue.mount \
-	sys-kernel-config.mount \
-	sys-kernel-debug.mount \
-	sys-fs-fuse-connections.mount \
-	systemd-sysctl.service \
-	systemd-ask-password-console.path
-
-if HAVE_SYSV_COMPAT
-SYSTEM_UNIT_ALIASES += \
-	poweroff.target runlevel0.target \
-	rescue.target runlevel1.target \
-	multi-user.target runlevel2.target \
-	multi-user.target runlevel3.target \
-	multi-user.target runlevel4.target \
-	graphical.target runlevel5.target \
-	reboot.target runlevel6.target
-endif
-
-SYSTEM_UNIT_ALIASES += \
-	graphical.target default.target \
-	reboot.target ctrl-alt-del.target \
-	getty@.service autovt@.service
-
-USER_UNIT_ALIASES += \
-	$(systemunitdir)/shutdown.target shutdown.target \
-	$(systemunitdir)/sockets.target sockets.target \
-	$(systemunitdir)/timers.target timers.target \
-	$(systemunitdir)/paths.target paths.target \
-	$(systemunitdir)/bluetooth.target bluetooth.target \
-	$(systemunitdir)/printer.target printer.target \
-	$(systemunitdir)/sound.target sound.target \
-	$(systemunitdir)/smartcard.target smartcard.target
-
-GENERAL_ALIASES += \
-	$(systemunitdir)/remote-fs.target $(pkgsysconfdir)/system/multi-user.target.wants/remote-fs.target \
-	$(systemunitdir)/getty@.service $(pkgsysconfdir)/system/getty.target.wants/getty@tty1.service \
-	$(pkgsysconfdir)/user $(sysconfdir)/xdg/systemd/user \
-	../system-services/org.freedesktop.systemd1.service $(dbussessionservicedir)/org.freedesktop.systemd1.service
-
-if HAVE_SYSV_COMPAT
-INSTALL_DIRS += \
-	$(systemunitdir)/runlevel1.target.wants \
-	$(systemunitdir)/runlevel2.target.wants \
-	$(systemunitdir)/runlevel3.target.wants \
-	$(systemunitdir)/runlevel4.target.wants \
-	$(systemunitdir)/runlevel5.target.wants
-endif
-
 INSTALL_DIRS += \
 	$(prefix)/lib/modules-load.d \
 	$(sysconfdir)/modules-load.d \
@@ -3578,10 +3121,6 @@ INSTALL_DIRS += \
 	$(usergeneratordir) \
 	\
 	$(userunitdir) \
-	$(pkgsysconfdir)/system \
-	$(pkgsysconfdir)/system/multi-user.target.wants \
-	$(pkgsysconfdir)/system/getty.target.wants \
-	$(pkgsysconfdir)/user \
 	$(dbussessionservicedir) \
 	$(sysconfdir)/xdg/systemd
 
