@@ -102,7 +102,6 @@ rootprefix=@rootprefix@
 rootbindir=$(rootprefix)/bin
 rootlibexecdir=$(rootprefix)/lib/systemd
 
-CLEANFILES = $(BUILT_SOURCES)
 DISTCLEANFILES =
 EXTRA_DIST =
 BUILT_SOURCES =
