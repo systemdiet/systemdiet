@@ -138,6 +138,8 @@ TESTS =
 endif
 udevlibexec_PROGRAMS =
 
+GENERAL_ALIASES =
+
 in_files = $(filter %.in,$(EXTRA_DIST))
 in_in_files = $(filter %.in.in, $(in_files))
 m4_files = $(filter %.m4,$(EXTRA_DIST) $(in_files:.m4.in=.m4))
@@ -216,6 +218,7 @@ install-directories-hook:
 	$(MKDIR_P) $(addprefix $(DESTDIR),$(INSTALL_DIRS))
 
 INSTALL_EXEC_HOOKS += \
+	install-aliases-hook \
 	install-directories-hook
 
 # ------------------------------------------------------------------------------
@@ -2982,6 +2985,22 @@ SED_PROCESS = \
 	$(AM_V_GEN)$(MKDIR_P) $(dir $@) && \
 	$(SED) $(subst '|,-e 's|@,$(subst =,\@|,$(subst |',|g',$(substitutions)))) \
 		< $< > $@
+
+install-aliases-hook:
+	set -- $(GENERAL_ALIASES) && \
+		dir= && $(install-aliases)
+
+define install-aliases
+	while [ -n "$$1" ]; do \
+		$(MKDIR_P) `dirname $(DESTDIR)$$dir/$$2` && \
+		rm -f $(DESTDIR)$$dir/$$2 && \
+		$(LN_S) $$1 $(DESTDIR)$$dir/$$2 && \
+		shift 2 || exit $$?; \
+	done
+endef
+
+GENERAL_ALIASES += \
+	../system-services/org.freedesktop.systemd1.service $(dbussessionservicedir)/org.freedesktop.systemd1.service
 
 man/%: man/%.in Makefile
 	$(SED_PROCESS)
